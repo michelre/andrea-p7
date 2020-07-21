@@ -9,8 +9,8 @@ const sequelize = new Sequelize(`mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${
 
 // test DB
 sequelize.authenticate()
-.then(() => console.log('database connected ...!'))
-.catch(error => console.log(error))
+  .then(() => console.log('database connected ...!'))
+  .catch(error => console.log(error))
 
 const app = express();
 

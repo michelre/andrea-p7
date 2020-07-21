@@ -1,25 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr-fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
     <title>Me connecter</title>
 </head>
+
 <body>
+    <header>
+        <div class="container">
+            <a href="index.html">
+                <img class="logo" src="./img/icon-left-font-monochrome-black.png" alt="logo" />
+            </a>
+        </div>
+    </header>
 
-    <h1>Me connecter</h1>
+    <main class="container-main">
 
-    <form id="login-form">
-        <label>Email</label>
-        <input name="email" placeholder="Email" type="email" name="email" required>
+        <div class="titles">
+            <a class="title" href="signup.html">S'inscrire</a>
+            <a class="title">Se connecter</a>
+        </div>
 
-        <label>Password</label>
-        <input name="password" type="password" name="password" required>
-        <input id="btn" type="submit" value="Se connecter"/>
-    </form>
+        <form id="login-form">
+            <label>Email</label>
+            <input name="email" placeholder="Email" type="email" name="email" required>
 
-<script src="node_modules/axios/dist/axios.min.js"></script>
-<script src="js/login.js"></script>
+            <label>Password</label>
+            <input name="password" type="password" name="password" required>
+            <input id="btn" type="submit" value="Se connecter" />
+        </form>
+    </main>
+
+    <script src="node_modules/axios/dist/axios.min.js"></script>
+    <script src="js/login.js"></script>
 </body>
+
 </html>

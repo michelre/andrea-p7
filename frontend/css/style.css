@@ -8,3 +8,19 @@ input {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+.logo {
+    display: flex;
+    margin: auto;
+    width: 20%;
+}
+.title {
+    font-family: arial;
+    font-size: 17px;
+    color: black;
+    margin-left: 30px;
+}
+.titles {
+    display: flex;
+    align-items: baseline;
+    margin-left: 7%;
+}
