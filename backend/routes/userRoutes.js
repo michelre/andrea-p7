@@ -1,6 +1,6 @@
 // Imports
 const express = require('express');
-const userCtrl = require('./controllers/usersCtrl');
+const userCtrl = require('../controllers/usersCtrl');
 
 // Router
 exports.router = (function () {
