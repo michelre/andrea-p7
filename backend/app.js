@@ -1,19 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
-require('dotenv').config();
 const apiRouter = require('./apiRouter').router;
-
-// const User = require('./models/user');
-
-const { DB_HOST, DB_PORT, DB_PASSWORD, DB_USER, DB_NAME } = process.env
-
-const sequelize = new Sequelize(`mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`)
-
-// test DB
-sequelize.authenticate()
-  .then(() => console.log('database connected ...!'))
-  .catch(error => console.log(error))
 
 const app = express();
 
@@ -28,16 +16,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/api/', apiRouter);
-
-
-// app.post('/signup', (req, res, next) => {
-//   const user = new User({
-//     ...req.body
-//   });
-//   user.save()
-//     .then(() => res.status(201).json({ message: 'Objet enregistré !' }))
-//     .catch(error => res.status(400).json({ error }));
-// });
 
 
 /**
