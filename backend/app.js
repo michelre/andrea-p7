@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
 const apiRouter = require('./routes/userRoutes').router;
+const messagesRouter = require('./routes/messagesRoutes').router;
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/api/', apiRouter);
+app.use('/api/', messagesRouter);
 
 
 /**

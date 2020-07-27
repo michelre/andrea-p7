@@ -15,10 +15,7 @@ module.exports = {
         if (email == null || password == null || firstName == null || lastName == null) {
             return res.status(400).json({ 'error': 'missing parameters' });
         }
-        // Pour eviter que l'user se connecte avec un seul lettre ou avec trop de lettres
-        if (username.length >= 13 || username.length <= 4) {
-            return res.status(400).json({ 'error': 'wrong username (must be length 5 - 12)' });
-        }
+
 
 
         models.User.findOne({
@@ -54,7 +51,6 @@ module.exports = {
             });
 
     },
-    ///////
     login: function (req, res) {
         const email = req.body.email;
         const password = req.body.password;
@@ -71,6 +67,7 @@ module.exports = {
                     bcrypt.compare(password, userFound.password, function (errBycrypt, resBycrypt) {
                         if (resBycrypt) {
                             return res.status(200).json({
+                                "status": "OK",
                                 'userId': userFound.id,
                                 'token': jwtUtils.generateTokenForUser(userFound)
                             });
@@ -85,5 +82,36 @@ module.exports = {
             .catch(function (err) {
                 return res.status(500).json({ 'error': 'unable to verify user' });
             });
+
+    },
+
+    // Pour recuperer le profile et de pouvoir le modifier
+    getUserProfile: function (req, res) {
+        const headerAuth = req.headers['authorization'];
+        const userId = jwtUtils.getUserId(headerAuth);
+
+        if (userId < 0)
+            return res.status(400).json({ 'error': 'wrong token' });
+
+        models.User.findOne({
+            attributes: ['id', 'email', 'firstName', 'lastName'],
+            where: { id: userId }
+        }).then(function (user) {
+            if (user) {
+                res.status(201).json(user);
+            } else {
+                res.status(404).json({ 'error': 'user not found' });
+            }
+        }).catch(function (err) {
+            res.status(500).json({ 'error': 'cannot fetch user' });
+        })
+    },
+
+    // Pour modifier le profile
+    updateUserProfile: function (req, res) {
+        const headerAuth = req.headers['authorization'];
+        const userId = jwtUtils.getUserId(headerAuth);
+
+        const firstName = req.body.firstName;
     }
 }
