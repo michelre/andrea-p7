@@ -1,6 +1,7 @@
 // Imports
 const express = require('express');
 const messagesCtrl = require('../controllers/messagesCtrl');
+const auth = require('../middlewares/auth')
 // const likesCtrl = require('./routes/likesCtrl');
 
 // Router
@@ -8,8 +9,9 @@ exports.router = (function () {
     const messagesRouter = express.Router();
 
     // Messages routes
-    messagesRouter.route('/messages/new/').post(messagesCtrl.createMessage);
-    messagesRouter.route('/messages/').get(messagesCtrl.listMessages);
+
+    messagesRouter.post('/messages/new/', auth, messagesCtrl.createMessage);
+    messagesRouter.get('/messages/', messagesCtrl.listMessages);
 
     //Likes
     // apiRouter.route('/messages/:messageId/vote/like').post(likesCtrl.likePost);

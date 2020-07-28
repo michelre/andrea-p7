@@ -70,11 +70,11 @@ module.exports = {
             // test pour s'assurer que l'utilisateur rentre des donné correctes
             order: [(order != null) ? order.split(':') : ['title', 'ASC']],
             attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
-            limit: (!isNaN(limit)) ? limit : null,
-            offset: (!isNaN(offset)) ? offset : null,
+            // limit: (!isNaN(limit)) ? limit : null,
+            // offset: (!isNaN(offset)) ? offset : null,
             include: [{
                 model: models.User,
-                attributes: ['username']
+                attributes: ['firstName', 'lastName']
             }]
         }).then(function (messages) {
             if (messages) {
@@ -84,7 +84,6 @@ module.exports = {
             }
         }).catch(function (err) {
             console.log(err);
-            console.log(fields);
             res.status(500).json({ 'error': 'invalid fields ' });
         })
     }
