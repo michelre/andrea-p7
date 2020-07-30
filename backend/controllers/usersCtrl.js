@@ -85,7 +85,7 @@ module.exports = {
 
     },
 
-    // Pour recuperer le profile et de pouvoir le modifier
+    // Pour recuperer le profile et pouvoir le modifier
     getUserProfile: function (req, res) {
         const headerAuth = req.headers['authorization'];
         const userId = jwtUtils.getUserId(headerAuth);

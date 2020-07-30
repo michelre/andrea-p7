@@ -73,3 +73,19 @@ textarea {
     display: flex;
     flex-direction: column;
 }
+.likes-icon, .dislikes-icon {
+    width: 25px;
+    margin: 30px;
+}
+.dislikes-icon {
+    transform: rotate(0.5turn);
+}
+.content-likes {
+    display: flex;
+    justify-content: center;
+}
+.div-likes, .div-dislikes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

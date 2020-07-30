@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
 const apiRouter = require('./routes/userRoutes').router;
 const messagesRouter = require('./routes/messagesRoutes').router;
+const likesRouter = require('./routes/likesRoutes').router;
 
 const app = express();
 
@@ -18,21 +19,6 @@ app.use(bodyParser.json());
 
 app.use('/api/', apiRouter);
 app.use('/api/', messagesRouter);
-
-
-/**
- * Routes User
- *  Signin
- *  Signup
- */
-
-/**
- * Routes Article (authentifiée)
- * Middleware d'authentification avec JWT
- *  Create (id, contenu (html)
- *  Update
- *  Delete
- *  GetAll (du plus récent au plus ancien)
- */
+app.use('/api/', likesRouter);
 
 module.exports = app;
