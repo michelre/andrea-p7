@@ -14,7 +14,7 @@ const listMessages = (messages) => {
         const parent = document.getElementById("listMessages"); // ou je vais appliquer la div
         parent.appendChild(div); // ajout de div dans l'element parent
 
-        // ajout du user
+        //ajout du user
         // const h1 = document.createElement('h1');
         // div.appendChild(h1);
         // h1.innerHTML = messages[i].User.firstName + '<br>' + messages[i].User.lastName;
@@ -79,18 +79,6 @@ const listMessages = (messages) => {
 };
 
 
-//envoie du like ou dislike
-const likeSubmit = document.querySelector(".btn-likes");
 
-const tokenKey = {
-    headers: { 'Authorization': "Bearer " + localStorage.getItem("api-token") }
-};
 
-likeSubmit.addEventListener('submit', function (e) {
-
-    axios.post('http://localhost:3000/api/messages/:messageId/vote/like', tokenKey)
-        .then((resp) => {
-
-            console.log(resp);
-        })
-});
+// envoie du like ou dislike

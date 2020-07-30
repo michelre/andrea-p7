@@ -10,6 +10,8 @@ exports.router = (function () {
     // Messages routes
     messagesRouter.post('/messages/new/', auth, messagesCtrl.createMessage);
     messagesRouter.get('/messages/', messagesCtrl.listMessages);
+    messagesRouter.put('/messages/update/', messagesCtrl.updatePost);
+
 
     return messagesRouter;
 })();

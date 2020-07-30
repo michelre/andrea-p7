@@ -16,10 +16,6 @@ module.exports = {
         if (title == null || content == null) {
             return res.status(400).json({ 'error': 'missing parameters' });
         }
-        // si le title est < 2 ou le content < 4 = erreus !
-        if (title.length <= 2 || content.length <= 4) {
-            return res.status(400).json({ 'error': 'invalid parameters' });
-        }
 
         asyncLib.waterfall([
             function (done) {
@@ -85,5 +81,23 @@ module.exports = {
             console.log(err);
             res.status(500).json({ 'error': 'invalid fields ' });
         })
+    },
+
+    // Modifier un post
+    updatePost: function (req, res) {
+        models.Message.update({
+            title: title,
+            content: content,
+            likes: 0,
+            UserId: userFound.id
+        })
+            .then(function () {
+                done(User);
+            }).catch(function (err) {
+                res.status(500).json({ 'error': 'NOOOOOOOO' });
+            });
     }
+
 }
+
+
