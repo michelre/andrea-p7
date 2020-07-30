@@ -67,7 +67,6 @@ module.exports = {
         const order = req.query.order; // pour mettre les messages dans un ordre particulier
 
         models.Message.findAll({
-            // test pour s'assurer que l'utilisateur rentre des donné correctes
             order: [(order != null) ? order.split(':') : ['title', 'ASC']],
             attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
             // limit: (!isNaN(limit)) ? limit : null,
