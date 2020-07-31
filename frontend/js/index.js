@@ -1,12 +1,17 @@
-const ajax = new Ajax();
-ajax.get("http://localhost:3000/api/messages")
-    .then((messages) => {
-        listMessages(messages); //appel de la fonction d'affichage des messages
-    });
+const headers = {
+    headers: { 'Authorization': "Bearer " + localStorage.getItem("api-token") }
+};
+
+axios.get("http://localhost:3000/api/messages").then((data) => {
+    listMessages(data.data); //appel de la fonction d'affichage des messages
+});
+
 
 //declaration de la fonction d'affichage des messages
 const listMessages = (messages) => {
     for (let i in messages) {
+
+        let nbLikes = messages[i].likes;
 
         // creation de la div 
         const div = document.createElement('div')
@@ -15,9 +20,9 @@ const listMessages = (messages) => {
         parent.appendChild(div); // ajout de div dans l'element parent
 
         //ajout du user
-        // const h1 = document.createElement('h1');
-        // div.appendChild(h1);
-        // h1.innerHTML = messages[i].User.firstName + '<br>' + messages[i].User.lastName;
+        const h1 = document.createElement('h1');
+        div.appendChild(h1);
+        h1.innerHTML = messages[i].User.firstName + '<br>' + messages[i].User.lastName;
 
         // ajout de h2 = titre 
         const h2 = document.createElement('h2');
@@ -59,7 +64,7 @@ const listMessages = (messages) => {
         const spanLikes = document.createElement('span');
         spanLikes.className = 'span-likes'
         divLikes.appendChild(spanLikes);
-        spanLikes.innerHTML = messages[i].likes + " J'aime";
+        spanLikes.innerHTML = nbLikes + " J'aime";
 
         // lien pour dislike
         const divDislikes = document.createElement('div');
@@ -75,10 +80,23 @@ const listMessages = (messages) => {
         imgDislikes.src = "https://img.icons8.com/material-outlined/50/000000/facebook-like.png";
         btnDislikes.appendChild(imgDislikes);
 
+        btnLikes.addEventListener('click', () => {
+            axios.post(`http://localhost:3000/api/messages/${messages[i].id}/vote/like`, {}, headers).then((resp) => {
+                nbLikes += 1
+                spanLikes.innerHTML = nbLikes + " J'aime";
+            })
+        })
+
+        btnDislikes.addEventListener('click', () => {
+            axios.post(`http://localhost:3000/api/messages/${messages[i].id}/vote/dislike`, {}, headers).then((resp) => {
+                nbLikes -= 1
+                spanLikes.innerHTML = nbLikes + " J'aime";
+            })
+        })
+
+
     }
 };
-
-
 
 
 // envoie du like ou dislike
