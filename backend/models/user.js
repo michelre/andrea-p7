@@ -8,14 +8,6 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING
-  }, {
-    classMethods: {
-      associate: function (models) {
-        // association
-        models.User.hasMany(models.Message)
-
-      }
-    }
   });
   sequelize.sync()
   return User;

@@ -69,7 +69,8 @@ module.exports = {
             // offset: (!isNaN(offset)) ? offset : null,
             include: [{
                 model: models.User,
-                attributes: ['firstName', 'lastName']
+                as: 'User',
+                attributes: ['firstName', 'lastName'],
             }]
         }).then(function (messages) {
             if (messages) {
