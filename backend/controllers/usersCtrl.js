@@ -29,7 +29,8 @@ module.exports = {
                             email: email,
                             password: bcryptedPassword,
                             firstName: firstName,
-                            lastName: lastName
+                            lastName: lastName,
+                            isAdmin: 0
                         })
                             .then(function (newUser) {
                                 return res.status(201).json({

@@ -2,6 +2,7 @@
 const asyncLib = require('async');
 const jwtUtils = require('../utils/jwt.utils');
 const models = require('../models');
+const db = require('../models');
 
 // Routes
 module.exports = {
@@ -14,19 +15,19 @@ module.exports = {
 
         // si le champ title ou le champ content sont vide = erreur !
         if (title == null || content == null) {
-            return res.status(400).json({'error': 'missing parameters'});
+            return res.status(400).json({ 'error': 'missing parameters' });
         }
 
         asyncLib.waterfall([
             function (done) {
                 models.User.findOne({
-                    where: {id: userId}
+                    where: { id: userId }
                 })
                     .then(function (userFound) {
                         done(null, userFound);
                     })
                     .catch(function (err) {
-                        return res.status(500).json({'error': 'unable to verify user'});
+                        return res.status(500).json({ 'error': 'unable to verify user' });
                     });
             },
             function (userFound, done) {
@@ -43,14 +44,14 @@ module.exports = {
                         });
 
                 } else {
-                    res.status(400).json({'error': 'user not found'});
+                    res.status(400).json({ 'error': 'user not found' });
                 }
             }
         ], function (newMessage) {
             if (newMessage) {
                 return res.status(201).json(newMessage);
             } else {
-                return res.status(500).json({'error': 'cannot post message'});
+                return res.status(500).json({ 'error': 'cannot post message' });
             }
         });
     },
@@ -78,18 +79,17 @@ module.exports = {
                 const jsonMessages = []
                 for (let i = 0; i < messages.length; i++) {
                     const jsonMessage = messages[i].toJSON();
-                    console.log(jsonMessage.UserId)
                     //Si le message concerne l'utilisateur connecté, on ajoute un champ modifiable
                     jsonMessage['modifiable'] = userId === jsonMessage.UserId
                     jsonMessages.push(jsonMessage)
                 }
                 res.status(200).json(jsonMessages);
             } else {
-                res.status(404).json({"error": "no messages found"});
+                res.status(404).json({ "error": "no messages found" });
             }
         }).catch(function (err) {
             console.log(err);
-            res.status(500).json({'error': 'invalid fields '});
+            res.status(500).json({ 'error': 'invalid fields ' });
         })
     },
 
@@ -98,11 +98,11 @@ module.exports = {
             if (message) {
                 res.status(200).json(message);
             } else {
-                res.status(404).json({"error": "no message found"});
+                res.status(404).json({ "error": "no message found" });
             }
         }).catch(function (err) {
             console.log(err);
-            res.status(500).json({'error': 'invalid fields '});
+            res.status(500).json({ 'error': 'invalid fields ' });
         })
     },
 
@@ -119,18 +119,27 @@ module.exports = {
                 }).then(() => {
                     res.status(200).json(message);
                 }).catch(() => {
-                    res.status(500).json({'error': 'invalid fields '});
+                    res.status(500).json({ 'error': 'invalid fields ' });
                 })
 
             } else {
-                res.status(404).json({"error": "no message found"});
+                res.status(404).json({ "error": "no message found" });
             }
         }).catch(function (err) {
             console.log(err);
-            res.status(500).json({'error': 'invalid fields '});
+            res.status(500).json({ 'error': 'invalid fields ' });
         })
-    }
+    },
 
+    // Effacer un post
+    deletePost: function (req, res) {
+        models.Message.destroy({
+            where: {
+                id: req.params.id
+            }
+        }).then(() => res.status(200).json({ message: 'Post deleted !' }))
+            .catch(error => res.status(400).json({ error }));
+    }
 }
 
 

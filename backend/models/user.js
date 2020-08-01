@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING
+    lastName: DataTypes.STRING,
+    isAdmin: DataTypes.BOOLEAN
   });
   sequelize.sync()
   return User;

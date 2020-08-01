@@ -144,6 +144,14 @@ h1 {
 .author {
     font-size: 1em;
 }
+.modify-post, .delete-post {
+    color: #FFFFFF;
+    margin: 10px;
+} 
+
+
+
+
 @media all and (max-width: 768px) {
 
 }
