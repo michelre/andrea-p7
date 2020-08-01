@@ -2,11 +2,12 @@
 const asyncLib = require('async');
 const jwtUtils = require('../utils/jwt.utils');
 const models = require('../models');
-const db = require('../models');
+//const db = require('../models');
 
 // Routes
 module.exports = {
     createMessage: function (req, res) {
+        const messageObject = JSON.parse(req.body.Message); //***********************************//
         const headerAuth = req.headers['authorization'];
         const userId = jwtUtils.getUserId(headerAuth);
 
@@ -37,7 +38,8 @@ module.exports = {
                         title: title,
                         content: content,
                         likes: 0,
-                        UserId: userFound.id
+                        UserId: userFound.id,
+                        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`///***********************************//
                     })
                         .then(function (newMessage) {
                             done(newMessage);
