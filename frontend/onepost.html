@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr-fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!--favicon-->
+    <!--end favicon-->
+
+    <title>Message</title>
+    <meta name="description" content="" />
+</head>
+
+<body>
+    <div class="container-fluid">
+        <header>
+            <div class="container">
+                <a href="index.html">
+                    <img class="logo" src="./img/icon-left-font-monochrome-white.svg" alt="logo" />
+                </a>
+
+            </div>
+        </header>
+        <nav class="menu">
+            <ul>
+                <li><a href="index.html">Tous les post</a></li>
+                <li><a href="addpost.html">Ajouter un post</a></li>
+                <li><a href="account.html">Account</a></li>
+                <li><a href="signup.html">Déconnexion</a></li>
+            </ul>
+        </nav>
+
+        <main class="container-main">
+
+            <article class="container-post">
+                <h2 id="title-post" class="post"></h2>
+                <p id="text-post"></p>
+                <span id="date-post"></span>
+            </article>
+
+        </main>
+
+        <footer>
+        </footer>
+    </div>
+
+    <script src="node_modules/axios/dist/axios.min.js"></script>
+    <script src="Ajax.js"></script>
+    <script src="js/onePost.js" type="application/javascript"></script>
+    <script src="js/like.js" type="application/javascript"></script>
+    <script src="lib/moment/moment.min.js"></script>
+</body>
+
+</html>

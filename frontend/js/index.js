@@ -6,7 +6,6 @@ axios.get("http://localhost:3000/api/messages").then((data) => {
     listMessages(data.data); //appel de la fonction d'affichage des messages
 });
 
-
 //declaration de la fonction d'affichage des messages
 const listMessages = (messages) => {
     for (let i in messages) {
@@ -19,24 +18,28 @@ const listMessages = (messages) => {
         const parent = document.getElementById("listMessages"); // ou je vais appliquer la div
         parent.appendChild(div); // ajout de div dans l'element parent
 
-        //ajout du user
-        const h1 = document.createElement('h1');
-        div.appendChild(h1);
-        h1.innerHTML = messages[i].User.firstName + '<br>' + messages[i].User.lastName;
 
-        // ajout de h2 = titre 
-        const h2 = document.createElement('h2');
-        div.appendChild(h2);
-        h2.innerHTML = messages[i].title;
+        //ajout de h2 = titre 
+        const h1 = document.createElement('h1');
+        h1.className = 'title-post';
+        div.appendChild(h1);
+        h1.innerHTML = messages[i].title;
 
         // message
         const p = document.createElement("p"); //creation d' un paragraphe
         div.appendChild(p);
-
         p.innerHTML = messages[i].content; // ajout du message dans p
+
+        //ajout du user
+        const h2 = document.createElement('h2');
+        h2.className = 'author';
+        div.appendChild(h2);
+        h2.innerHTML = 'Post ajouté par: ' + messages[i].User.firstName + ' ' + messages[i].User.lastName;
+
 
         // date et heure
         const span = document.createElement('span');
+        span.className = 'span-post';
         div.appendChild(span);
         let newDate = moment(messages[i].createdAt).format('LLL');
         span.innerHTML = newDate;
@@ -80,6 +83,8 @@ const listMessages = (messages) => {
         imgDislikes.src = "https://img.icons8.com/material-outlined/50/000000/facebook-like.png";
         btnDislikes.appendChild(imgDislikes);
 
+
+
         btnLikes.addEventListener('click', () => {
             axios.post(`http://localhost:3000/api/messages/${messages[i].id}/vote/like`, {}, headers).then((resp) => {
                 nbLikes += 1
@@ -97,6 +102,3 @@ const listMessages = (messages) => {
 
     }
 };
-
-
-// envoie du like ou dislike
