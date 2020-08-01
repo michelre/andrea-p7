@@ -34,8 +34,8 @@ module.exports = {
                             .then(function (newUser) {
                                 return res.status(201).json({
                                     "status": "OK",
-                                    'userId': userFound.id,
-                                    'token': jwtUtils.generateTokenForUser(userFound)
+                                    'userId': newUser.id,
+                                    'token': jwtUtils.generateTokenForUser(newUser)
                                 })
                             })
                             .catch(function (err) {

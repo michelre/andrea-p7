@@ -1,28 +1,45 @@
 let params = new URL(document.location).searchParams;
-let idUser = params.get("id");
+let idMessage = params.get("id");
 
-const ajax = new Ajax();
-ajax.get("http://localhost:3000/api/messages/" + idUser)
-  .then((messages) => {
+const headers = {
+    headers: {'Authorization': "Bearer " + localStorage.getItem("api-token")}
+};
 
-    onePost(messages);
+axios.get("http://localhost:3000/api/messages/" + idMessage, headers)
+    .then(({data: message}) => {
+            const title = document.querySelector('#title')
+            const post = document.querySelector('#post')
+            title.value = message.title
+            post.value = message.content
+        },
+    );
 
+const form = document.querySelector('#message-form')
 
-  },
-    () => {
-      console.log(messages);
+form.addEventListener('submit', function(e){
+    e.preventDefault()
+    const title = e.target.title.value;
+    const content = e.target.post.value;
+
+    const data = {
+        title,
+        content
     }
-  );
 
+    axios.put("http://localhost:3000/api/messages/" + idMessage, data, headers).then(() => {
+        window.location.href = 'index.html'
+    })
 
+    console.log(title, post)
+})
 
 
 const onePost = (post) => {
 
 
-  // ajout nom du produit
-  // const name = document.getElementById("title-post");
-  // name.innerHTML = post;
+    // ajout nom du produit
+    // const name = document.getElementById("title-post");
+    // name.innerHTML = post;
 
 
 }

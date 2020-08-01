@@ -9,8 +9,9 @@ exports.router = (function () {
 
     // Messages routes
     messagesRouter.post('/messages/new/', auth, messagesCtrl.createMessage);
-    messagesRouter.get('/messages/', messagesCtrl.listMessages);
-    messagesRouter.put('/messages/update/', messagesCtrl.updatePost);
+    messagesRouter.get('/messages/', auth, messagesCtrl.listMessages);
+    messagesRouter.get('/messages/:id', auth, messagesCtrl.getMessage);
+    messagesRouter.put('/messages/:id', auth, messagesCtrl.updatePost);
 
 
     return messagesRouter;

@@ -14,7 +14,7 @@ messageForm.addEventListener('submit', function (e) {
 
     axios.post('http://localhost:3000/api/messages/new', { title, content }, tokenKey)
         .then((resp) => {
-            console.log(resp);
+            window.location.href = 'index.html'
 
         })
 });

@@ -14,19 +14,19 @@ module.exports = {
 
         // si le champ title ou le champ content sont vide = erreur !
         if (title == null || content == null) {
-            return res.status(400).json({ 'error': 'missing parameters' });
+            return res.status(400).json({'error': 'missing parameters'});
         }
 
         asyncLib.waterfall([
             function (done) {
                 models.User.findOne({
-                    where: { id: userId }
+                    where: {id: userId}
                 })
                     .then(function (userFound) {
                         done(null, userFound);
                     })
                     .catch(function (err) {
-                        return res.status(500).json({ 'error': 'unable to verify user' });
+                        return res.status(500).json({'error': 'unable to verify user'});
                     });
             },
             function (userFound, done) {
@@ -43,27 +43,28 @@ module.exports = {
                         });
 
                 } else {
-                    res.status(400).json({ 'error': 'user not found' });
+                    res.status(400).json({'error': 'user not found'});
                 }
             }
         ], function (newMessage) {
             if (newMessage) {
                 return res.status(201).json(newMessage);
             } else {
-                return res.status(500).json({ 'error': 'cannot post message' });
+                return res.status(500).json({'error': 'cannot post message'});
             }
         });
     },
 
 
     listMessages: function (req, res) {
+        const userId = jwtUtils.getUserId(req.headers['authorization']);
         const fields = req.query.fields; // permet de selectionner les colonnes qu'on veut afficher
         const limit = parseInt(req.query.limit); // pour visualiser juste un nombre de messages
         const offset = parseInt(req.query.offset);
         const order = req.query.order; // pour mettre les messages dans un ordre particulier
 
         models.Message.findAll({
-            order: [(order != null) ? order.split(':') : ['title', 'ASC']],
+            order: [(order != null) ? order.split(':') : ['createdAt', 'ASC']],
             attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
             // limit: (!isNaN(limit)) ? limit : null,
             // offset: (!isNaN(offset)) ? offset : null,
@@ -74,29 +75,60 @@ module.exports = {
             }]
         }).then(function (messages) {
             if (messages) {
-                res.status(200).json(messages);
+                const jsonMessages = []
+                for (let i = 0; i < messages.length; i++) {
+                    const jsonMessage = messages[i].toJSON();
+                    console.log(jsonMessage.UserId)
+                    //Si le message concerne l'utilisateur connecté, on ajoute un champ modifiable
+                    jsonMessage['modifiable'] = userId === jsonMessage.UserId
+                    jsonMessages.push(jsonMessage)
+                }
+                res.status(200).json(jsonMessages);
             } else {
-                res.status(404).json({ "error": "no messages found" });
+                res.status(404).json({"error": "no messages found"});
             }
         }).catch(function (err) {
             console.log(err);
-            res.status(500).json({ 'error': 'invalid fields ' });
+            res.status(500).json({'error': 'invalid fields '});
+        })
+    },
+
+    getMessage: function (req, res) {
+        models.Message.findByPrimary(req.params.id).then(function (message) {
+            if (message) {
+                res.status(200).json(message);
+            } else {
+                res.status(404).json({"error": "no message found"});
+            }
+        }).catch(function (err) {
+            console.log(err);
+            res.status(500).json({'error': 'invalid fields '});
         })
     },
 
     // Modifier un post
     updatePost: function (req, res) {
-        models.Message.update({
-            title: title,
-            content: content,
-            likes: 0,
-            UserId: userFound.id
+        const id = req.params.id
+        const title = req.body.title
+        const content = req.body.content
+        models.Message.findByPrimary(req.params.id).then(function (message) {
+            if (message) {
+                message.update({
+                    title: title,
+                    content: content,
+                }).then(() => {
+                    res.status(200).json(message);
+                }).catch(() => {
+                    res.status(500).json({'error': 'invalid fields '});
+                })
+
+            } else {
+                res.status(404).json({"error": "no message found"});
+            }
+        }).catch(function (err) {
+            console.log(err);
+            res.status(500).json({'error': 'invalid fields '});
         })
-            .then(function () {
-                done(User);
-            }).catch(function (err) {
-                res.status(500).json({ 'error': 'NOOOOOOOO' });
-            });
     }
 
 }

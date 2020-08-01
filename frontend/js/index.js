@@ -2,7 +2,7 @@ const headers = {
     headers: { 'Authorization': "Bearer " + localStorage.getItem("api-token") }
 };
 
-axios.get("http://localhost:3000/api/messages").then((data) => {
+axios.get("http://localhost:3000/api/messages", headers).then((data) => {
     listMessages(data.data); //appel de la fonction d'affichage des messages
 });
 
@@ -12,7 +12,7 @@ const listMessages = (messages) => {
 
         let nbLikes = messages[i].likes;
 
-        // creation de la div 
+        // creation de la div
         const div = document.createElement('div')
         div.className = "post"; // ajout de la class
         const parent = document.getElementById("listMessages"); // ou je vais appliquer la div
@@ -83,7 +83,12 @@ const listMessages = (messages) => {
         imgDislikes.src = "https://img.icons8.com/material-outlined/50/000000/facebook-like.png";
         btnDislikes.appendChild(imgDislikes);
 
-
+        if(messages[i].modifiable){
+            const modifiableLink = document.createElement('a')
+            modifiableLink.href = `onepost.html?id=${messages[i].id}`
+            modifiableLink.innerHTML = 'Modifier'
+            div.appendChild(modifiableLink)
+        }
 
         btnLikes.addEventListener('click', () => {
             axios.post(`http://localhost:3000/api/messages/${messages[i].id}/vote/like`, {}, headers).then((resp) => {
