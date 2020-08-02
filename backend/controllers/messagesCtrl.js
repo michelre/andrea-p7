@@ -2,17 +2,16 @@
 const asyncLib = require('async');
 const jwtUtils = require('../utils/jwt.utils');
 const models = require('../models');
-//const db = require('../models');
 
 // Routes
 module.exports = {
     createMessage: function (req, res) {
-        const messageObject = JSON.parse(req.body.Message); //***********************************//
         const headerAuth = req.headers['authorization'];
         const userId = jwtUtils.getUserId(headerAuth);
 
         const title = req.body.title;
         const content = req.body.content;
+        const image = req.body.image
 
         // si le champ title ou le champ content sont vide = erreur !
         if (title == null || content == null) {
@@ -21,13 +20,12 @@ module.exports = {
 
         asyncLib.waterfall([
             function (done) {
-                models.User.findOne({
-                    where: { id: userId }
-                })
+                models.User.findById(userId)
                     .then(function (userFound) {
                         done(null, userFound);
                     })
                     .catch(function (err) {
+                        console.log(err)
                         return res.status(500).json({ 'error': 'unable to verify user' });
                     });
             },
@@ -39,7 +37,7 @@ module.exports = {
                         content: content,
                         likes: 0,
                         UserId: userFound.id,
-                        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`///***********************************//
+                        attachment: req.file.filename
                     })
                         .then(function (newMessage) {
                             done(newMessage);
@@ -69,8 +67,6 @@ module.exports = {
         models.Message.findAll({
             order: [(order != null) ? order.split(':') : ['createdAt', 'ASC']],
             attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
-            // limit: (!isNaN(limit)) ? limit : null,
-            // offset: (!isNaN(offset)) ? offset : null,
             include: [{
                 model: models.User,
                 as: 'User',
@@ -116,8 +112,8 @@ module.exports = {
         models.Message.findByPrimary(req.params.id).then(function (message) {
             if (message) {
                 message.update({
-                    title: title,
-                    content: content,
+                    title,
+                    content,
                 }).then(() => {
                     res.status(200).json(message);
                 }).catch(() => {

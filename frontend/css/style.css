@@ -57,6 +57,8 @@ input {
     margin: 5px;
     max-width: 600px;
     border-bottom: solid #d3545c 3px;
+    display: flex;
+    flex-direction: column;
 
 }
 article {
@@ -84,9 +86,13 @@ textarea {
     display: flex;
     flex-direction: column;
 }
+.btn-likes, .btn-dislikes {
+    margin: 10px;
+    background-color: transparent;
+    border: none;
+}
 .likes-icon, .dislikes-icon {
     width: 25px;
-    margin: 30px;
 }
 .dislikes-icon {
     transform: rotate(0.5turn);
@@ -112,6 +118,10 @@ a {
 .title-post {
     color: #FFFFFF;
     text-align: center;
+    font-size: 1.5em;
+}
+.pPost {
+    font-size: 1.5em;
 }
 p, .navbar, .span-likes {
     color: #d4d3d3;
@@ -144,11 +154,26 @@ h1 {
 .author {
     font-size: 1em;
 }
-.modify-post, .delete-post {
-    color: #FFFFFF;
-    margin: 10px;
+.content-modify {
+    display: flex;
+    justify-content: space-between;
+}
+.link-modify-post  {
+    color: #182b49;
 } 
-
+.modify-post, .delete-post {
+    color: #182b49;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    width: 150px;
+}
+.img-post {
+    border: #FFFF solid 2px;
+    width: 40%;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
 
 
 

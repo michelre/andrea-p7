@@ -30,7 +30,21 @@
         </div>
     </header>
     <main class="container-main">
-        <h1>Votre Profile</h1>
+        <h1>Modifié votre profile</h1>
+        <form id="modify-form">
+            <label>Nom</label>
+            <input id="lastName" placeholder="Nom" name="last_name" required>
+
+            <label>Prénom</label>
+            <input id="firstName" placeholder="Prénom" name="first_name" required>
+
+            <label>Email</label>
+            <input id="email" placeholder="Email" type="email" name="email" required>
+
+            <!--<label>Password</label>
+            <input id="password" name="password" type="password" name="password" required> -->
+            <input id="btn" type="submit" value="Modifier mon profile" />
+        </form>
     </main>
 
     <footer>
@@ -42,9 +56,8 @@
     </div>
 
     <script src="node_modules/axios/dist/axios.min.js"></script>
-    <script src="Ajax.js"></script>
-    <script src="js/index.js" type="application/javascript"></script>
     <script src="lib/moment/moment.min.js"></script>
+    <script src="js/account.js" type="application/javascript"></script>
 </body>
 
 </html>

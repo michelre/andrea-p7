@@ -110,9 +110,27 @@ module.exports = {
 
     // Pour modifier le profile
     updateUserProfile: function (req, res) {
-        const headerAuth = req.headers['authorization'];
-        const userId = jwtUtils.getUserId(headerAuth);
-
         const firstName = req.body.firstName;
+        const lastName = req.body.lastName;
+        const email = req.body.lastName;
+        models.User.findByPrimary(req.params.id).then(function (user) {
+            if (user) {
+                user.update({
+                    firstName,
+                    lastName,
+                    email
+                }).then(() => {
+                    res.status(200).json(user);
+                }).catch(() => {
+                    res.status(500).json({ 'error': 'invalid fields ' });
+                })
+
+            } else {
+                res.status(404).json({ "error": "no user found" });
+            }
+        }).catch(function (err) {
+            console.log(err);
+            res.status(500).json({ 'error': 'invalid fields ' });
+        })
     }
 }

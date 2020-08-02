@@ -27,6 +27,7 @@ const listMessages = (messages) => {
 
         // message
         const p = document.createElement("p"); //creation d' un paragraphe
+        p.className = 'pPost'
         div.appendChild(p);
         p.innerHTML = messages[i].content; // ajout du message dans p
 
@@ -43,6 +44,15 @@ const listMessages = (messages) => {
         div.appendChild(span);
         let newDate = moment(messages[i].createdAt).format('LLL');
         span.innerHTML = newDate;
+
+        // images
+        if (messages[i].attachment) {
+            const imgAttachment = document.createElement('img');
+            imgAttachment.className = 'img-post';
+            imgAttachment.width = 75;
+            imgAttachment.src = 'http://localhost:3000/uploads/' + messages[i].attachment;
+            div.appendChild(imgAttachment);
+        }
 
         // like et dislike
         const divLikesDislike = document.createElement('div');
@@ -83,27 +93,6 @@ const listMessages = (messages) => {
         imgDislikes.src = "https://img.icons8.com/material-outlined/50/000000/facebook-like.png";
         btnDislikes.appendChild(imgDislikes);
 
-        if (messages[i].modifiable) {
-            const modifiableLink = document.createElement('a')
-            modifiableLink.className = 'modify-post'
-            modifiableLink.href = `onepost.html?id=${messages[i].id}`
-            modifiableLink.innerHTML = 'Modifier'
-            div.appendChild(modifiableLink)
-        }
-        if (messages[i].modifiable) {
-            const deleteBtn = document.createElement('button')
-            deleteBtn.className = 'delete-post'
-            deleteBtn.innerHTML = 'Effacer'
-            div.appendChild(deleteBtn)
-
-            deleteBtn.addEventListener('click', () => {
-                axios.delete(`http://localhost:3000/api/messages/delete/${messages[i].id}`, headers)
-                    .then((resp) => {
-                        console.log(resp);
-                    })
-            })
-        }
-
         btnLikes.addEventListener('click', () => {
             axios.post(`http://localhost:3000/api/messages/${messages[i].id}/vote/like`, {}, headers).then((resp) => {
                 nbLikes += 1
@@ -117,6 +106,38 @@ const listMessages = (messages) => {
                 spanLikes.innerHTML = nbLikes + " J'aime";
             })
         })
+
+        // div pour btn modifier et effacer
+        const divBtnModifiable = document.createElement('div');
+        divBtnModifiable.className = 'content-modify';
+        div.appendChild(divBtnModifiable);
+
+        // modifier
+        if (messages[i].modifiable) {
+            const modifyBtn = document.createElement('button')
+            divBtnModifiable.appendChild(modifyBtn);
+            modifyBtn.className = 'modify-post'
+            const modifiableLink = document.createElement('a')
+            modifiableLink.className = 'link-modify-post'
+            modifiableLink.href = `onepost.html?id=${messages[i].id}`
+            modifiableLink.innerHTML = 'Modifier'
+            modifyBtn.appendChild(modifiableLink)
+        }
+
+        // effacer
+        if (messages[i].modifiable) {
+            const deleteBtn = document.createElement('button')
+            deleteBtn.className = 'delete-post'
+            deleteBtn.innerHTML = 'Effacer'
+            divBtnModifiable.appendChild(deleteBtn)
+
+            deleteBtn.addEventListener('click', () => {
+                axios.delete(`http://localhost:3000/api/messages/delete/${messages[i].id}`, headers)
+                    .then((resp) => {
+                        console.log(resp);
+                    })
+            })
+        }
 
 
     }

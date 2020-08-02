@@ -12,7 +12,7 @@ exports.router = (function () {
     messagesRouter.post('/messages/new/', auth, multer, messagesCtrl.createMessage);
     messagesRouter.get('/messages/', auth, messagesCtrl.listMessages);
     messagesRouter.get('/messages/:id', auth, messagesCtrl.getMessage);
-    messagesRouter.put('/messages/:id', auth, messagesCtrl.updatePost);
+    messagesRouter.put('/messages/:id', auth, multer, messagesCtrl.updatePost);
     messagesRouter.delete('/messages/delete/:id', auth, messagesCtrl.deletePost);
 
 

@@ -10,7 +10,7 @@ const LIKED = 1;
 // Routes
 module.exports = {
     likePost: function (req, res) {
-        // Getting auth header
+        // Identifier l'utilisateur
         var headerAuth = req.headers['authorization'];
         var userId = jwtUtils.getUserId(headerAuth);
 
@@ -20,7 +20,7 @@ module.exports = {
         if (messageId <= 0) {
             return res.status(400).json({ 'error': 'invalid parameters' });
         }
-
+        // on voit si le message existe
         asyncLib.waterfall([
             function (done) {
                 models.Message.findOne({
@@ -33,8 +33,10 @@ module.exports = {
                         return res.status(500).json({ 'error': 'unable to verify message' });
                     });
             },
+            // on verifie si le message a été correctement trouvé
             function (messageFound, done) {
                 if (messageFound) {
+                    // on recupere l'objet utilisateur
                     models.User.findOne({
                         where: { id: userId }
                     })
@@ -48,6 +50,7 @@ module.exports = {
                     res.status(404).json({ 'error': 'post already liked' });
                 }
             },
+            // on verifie que l'utilisateur a été trouvé
             function (messageFound, userFound, done) {
                 if (userFound) {
                     models.Like.findOne({
@@ -56,6 +59,7 @@ module.exports = {
                             messageId: messageId
                         }
                     })
+                        // pour saoir si l'utilisateur a deja like un post
                         .then(function (userAlreadyLikedFound) {
                             done(null, messageFound, userFound, userAlreadyLikedFound);
                         })
@@ -66,6 +70,7 @@ module.exports = {
                     res.status(404).json({ 'error': 'user not exist' });
                 }
             },
+            // on verifie que l'utilisateur n'a pas deja liker le post
             function (messageFound, userFound, userAlreadyLikedFound, done) {
                 if (!userAlreadyLikedFound) {
                     messageFound.addUser(userFound, { isLike: LIKED })
@@ -89,6 +94,7 @@ module.exports = {
                     }
                 }
             },
+            // on vas incrementer un like ou un dislike
             function (messageFound, userFound, done) {
                 messageFound.update({
                     likes: messageFound.likes + 1,
@@ -98,6 +104,7 @@ module.exports = {
                     res.status(500).json({ 'error': 'cannot update message like counter' });
                 });
             },
+            // pour afficher les likes
         ], function (messageFound) {
             if (messageFound) {
                 return res.status(201).json(messageFound);

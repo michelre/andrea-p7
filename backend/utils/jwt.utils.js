@@ -7,10 +7,11 @@ module.exports = {
 
         return jwt.sign({
             userId: userData.id,
+            isAdmin: userData.isAdmin
         },
             JWT_SIGN_TOKEN,
             {
-                expiresIn: '24h'
+                expiresIn: '1h'
             })
     },
 

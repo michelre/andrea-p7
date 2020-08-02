@@ -4,12 +4,14 @@ const userCtrl = require('../controllers/usersCtrl');
 
 // Router
 exports.router = (function () {
-    const apiRouter = express.Router();
+    const userRouter = express.Router();
 
     //Users routes
-    apiRouter.route('/users/register/').post(userCtrl.register);
-    apiRouter.route('/users/login/').post(userCtrl.login);
-    apiRouter.route('/users/me/').get(userCtrl.getUserProfile);
+    userRouter.post('/users/register/', userCtrl.register);
+    userRouter.post('/users/login/', userCtrl.login);
+    userRouter.get('/users/me/', userCtrl.getUserProfile);
+    userRouter.put('/users/me/', userCtrl.updateUserProfile);
 
-    return apiRouter;
+
+    return userRouter;
 })();

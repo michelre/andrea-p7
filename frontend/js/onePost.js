@@ -18,7 +18,7 @@ axios.get("http://localhost:3000/api/messages/" + idMessage, headers)
     );
 
 
-
+// pour la modification d'un post
 form.addEventListener('submit', function (e) {
     e.preventDefault()
     const title = e.target.title.value;
@@ -35,6 +35,7 @@ form.addEventListener('submit', function (e) {
 
 })
 
+// pour la suppression d'un post
 deleteBtn.addEventListener('click', (e) => {
     e.preventDefault()
     axios.delete("http://localhost:3000/api/messages/delete/" + idMessage, headers).then(() => {
