@@ -1,6 +1,7 @@
 // Imports
 const express = require('express');
 const userCtrl = require('../controllers/usersCtrl');
+const auth = require('../middlewares/auth') //
 
 // Router
 exports.router = (function () {
@@ -11,6 +12,9 @@ exports.router = (function () {
     userRouter.post('/users/login/', userCtrl.login);
     userRouter.get('/users/me/', userCtrl.getUserProfile);
     userRouter.put('/users/me/', userCtrl.updateUserProfile);
+
+
+    userRouter.delete("/users/:id", auth, userCtrl.deleteProfil); //
 
 
     return userRouter;

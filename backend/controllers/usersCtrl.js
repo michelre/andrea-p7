@@ -132,5 +132,16 @@ module.exports = {
             console.log(err);
             res.status(500).json({ 'error': 'invalid fields ' });
         })
+    },
+    //
+    deleteProfil: (req, res) => {
+        models.User.destroy({
+            where: {
+                id: req.params.id
+            }
+        }).then(() => res.status(200).json({ message: 'User deleted !' }))
+            .catch(error => res.status(400).json({ error }));
     }
+
+    //
 }
