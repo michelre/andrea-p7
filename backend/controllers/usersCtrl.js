@@ -137,11 +137,14 @@ module.exports = {
     },
     //
     deleteProfil: (req, res) => {
-        models.User.destroy({
-            where: {
-                id: req.params.id
-            }
-        }).then(() => res.status(200).json({ message: 'User deleted !' }))
+        const headerAuth = req.headers['authorization'];
+        const userId = jwtUtils.getUserId(headerAuth);
+
+        models.Like
+            .destroy({ where: { UserId: userId } })
+            .then(() => models.Message.destroy({ where: { userId: userId } }))
+            .then(() => models.User.destroy({where: {id: userId}}))
+            .then(() => res.status(204).json())
             .catch(error => res.status(400).json({ error }));
     }
 

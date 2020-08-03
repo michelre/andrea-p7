@@ -35,3 +35,10 @@ form.addEventListener('submit', function (e) {
     })
 
 })
+
+const deleteAccount = document.querySelector('.delete-account')
+deleteAccount.addEventListener('click', () => {
+    axios.delete("http://localhost:3000/api/users/me/", headers).then(() => {
+        window.location.href = 'login.html'
+    })
+})

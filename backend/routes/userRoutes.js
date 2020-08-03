@@ -12,9 +12,7 @@ exports.router = (function () {
     userRouter.post('/users/login/', userCtrl.login);
     userRouter.get('/users/me/', auth, userCtrl.getUserProfile);
     userRouter.put('/users/me/', auth, userCtrl.updateUserProfile);
-
-
-    userRouter.delete("/users/:id", auth, userCtrl.deleteProfil); //
+    userRouter.delete("/users/me", auth, userCtrl.deleteProfil); //
 
 
     return userRouter;
