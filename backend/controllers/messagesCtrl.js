@@ -11,7 +11,6 @@ module.exports = {
 
         const title = req.body.title;
         const content = req.body.content;
-        const image = req.body.image
 
         // si le champ title ou le champ content sont vide = erreur !
         if (title == null || content == null) {
@@ -37,7 +36,7 @@ module.exports = {
                         content: content,
                         likes: 0,
                         UserId: userFound.id,
-                        attachment: req.file.filename
+                        attachment: req.file ? req.file.filename : null
                     })
                         .then(function (newMessage) {
                             done(newMessage);
@@ -64,21 +63,26 @@ module.exports = {
         const offset = parseInt(req.query.offset);
         const order = req.query.order; // pour mettre les messages dans un ordre particulier
 
-        models.Message.findAll({
-            order: [(order != null) ? order.split(':') : ['createdAt', 'ASC']],
-            attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
-            include: [{
-                model: models.User,
-                as: 'User',
-                attributes: ['firstName', 'lastName'],
-            }]
-        }).then(function (messages) {
+        /**
+         * Récupération de l'utilisateur connecté afin de savoir si il est administrateur
+         */
+        models.User.findByPrimary(userId).then((user) => {
+            return models.Message.findAll({
+                order: [(order != null) ? order.split(':') : ['createdAt', 'ASC']],
+                attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
+                include: [{
+                    model: models.User,
+                    as: 'User',
+                    attributes: ['firstName', 'lastName'],
+                }]
+            }).then((messages) => ({ messages, isAdmin: user.get('isAdmin') }))
+        }).then(function ({ messages, isAdmin }) {
             if (messages) {
                 const jsonMessages = []
                 for (let i = 0; i < messages.length; i++) {
                     const jsonMessage = messages[i].toJSON();
                     //Si le message concerne l'utilisateur connecté, on ajoute un champ modifiable
-                    jsonMessage['modifiable'] = userId === jsonMessage.UserId
+                    jsonMessage['modifiable'] = userId === jsonMessage.UserId || isAdmin
                     jsonMessages.push(jsonMessage)
                 }
                 res.status(200).json(jsonMessages);
@@ -87,7 +91,7 @@ module.exports = {
             }
         }).catch(function (err) {
             console.log(err);
-            res.status(500).json({ 'error': 'invalid fields ' });
+            res.status(500).json({ 'error': 'invalid fields' });
         })
     },
 
@@ -117,15 +121,15 @@ module.exports = {
                 }).then(() => {
                     res.status(200).json(message);
                 }).catch(() => {
-                    res.status(500).json({ 'error': 'invalid fields ' });
+                    res.status(500).json({ 'error': 'invalid fields' });
                 })
 
             } else {
-                res.status(404).json({ "error": "no message found" });
+                res.status(404).json({ 'error': "no message found" });
             }
         }).catch(function (err) {
             console.log(err);
-            res.status(500).json({ 'error': 'invalid fields ' });
+            res.status(500).json({ 'error': 'invalid fields' });
         })
     },
 
@@ -135,7 +139,7 @@ module.exports = {
             where: {
                 id: req.params.id
             }
-        }).then(() => res.status(200).json({ message: 'Post deleted !' }))
+        }).then(() => res.status(204).json())
             .catch(error => res.status(400).json({ error }));
     }
 }
