@@ -59,7 +59,7 @@ module.exports = {
                             messageId: messageId
                         }
                     })
-                        // pour saoir si l'utilisateur a deja like un post
+                        // pour savoir si l'utilisateur a deja like un post
                         .then(function (userAlreadyLikedFound) {
                             done(null, messageFound, userFound, userAlreadyLikedFound);
                         })
@@ -70,7 +70,7 @@ module.exports = {
                     res.status(404).json({ 'error': 'user not exist' });
                 }
             },
-            // on verifie que l'utilisateur n'a pas deja liker le post
+            // on verifie que l'utilisateur n'a pas deja liké le post
             function (messageFound, userFound, userAlreadyLikedFound, done) {
                 if (!userAlreadyLikedFound) {
                     messageFound.addUser(userFound, { isLike: LIKED })

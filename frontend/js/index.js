@@ -119,7 +119,7 @@ const listMessages = (messages) => {
 
         const imgLikes = document.createElement('img');
         imgLikes.className = "likes-icon";
-        imgLikes.src = "https://img.icons8.com/material-outlined/50/000000/facebook-like.png";
+        imgLikes.src = "https://img.icons8.com/dusk/64/000000/thumb-up.png";
         btnLikes.appendChild(imgLikes);
 
         // nombres likes
@@ -149,6 +149,7 @@ const listMessages = (messages) => {
                 spanLikes.innerHTML = nbLikes + " J'aime";
             })
         })
+
         /*
                 btnDislikes.addEventListener('click', () => {
                     axios.post(`http://localhost:3000/api/messages/${messages[i].id}/vote/dislike`, {}, headers).then((resp) => {
