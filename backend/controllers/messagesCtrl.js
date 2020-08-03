@@ -2,6 +2,7 @@
 const asyncLib = require('async');
 const jwtUtils = require('../utils/jwt.utils');
 const models = require('../models');
+const fs = require('fs').promises
 
 // Routes
 module.exports = {
@@ -135,12 +136,21 @@ module.exports = {
 
     // Effacer un post
     deletePost: function (req, res) {
-        models.Message.destroy({
-            where: {
-                id: req.params.id
+        const id = req.params.id
+
+        models.Message.findByPrimary(id).then((message) => {
+            const attachment = message.get('attachment');
+            let response = null
+            if(!attachment){
+                response = message.destroy()
+            } else {
+                const filePath = __dirname + '/../uploads/' + attachment
+                response = fs.unlink(filePath)
+                    .then(() => message.destroy())
             }
-        }).then(() => res.status(204).json())
-            .catch(error => res.status(400).json({ error }));
+            response.then(() => res.status(204).json())
+                .catch((error) => res.status(400).json({ error }))
+        })
     }
 }
 

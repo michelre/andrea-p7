@@ -110,10 +110,12 @@ module.exports = {
 
     // Pour modifier le profile
     updateUserProfile: function (req, res) {
+        const headerAuth = req.headers['authorization'];
+        const userId = jwtUtils.getUserId(headerAuth);
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
-        const email = req.body.lastName;
-        models.User.findByPrimary(req.params.id).then(function (user) {
+        const email = req.body.email;
+        models.User.findByPrimary(userId).then(function (user) {
             if (user) {
                 user.update({
                     firstName,

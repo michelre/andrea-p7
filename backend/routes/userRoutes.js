@@ -10,8 +10,8 @@ exports.router = (function () {
     //Users routes
     userRouter.post('/users/register/', userCtrl.register);
     userRouter.post('/users/login/', userCtrl.login);
-    userRouter.get('/users/me/', userCtrl.getUserProfile);
-    userRouter.put('/users/me/', userCtrl.updateUserProfile);
+    userRouter.get('/users/me/', auth, userCtrl.getUserProfile);
+    userRouter.put('/users/me/', auth, userCtrl.updateUserProfile);
 
 
     userRouter.delete("/users/:id", auth, userCtrl.deleteProfil); //

@@ -11,14 +11,10 @@ axios.get("http://localhost:3000/api/users/me/", headers)
         const lastName = document.querySelector('#lastName');
         const firstName = document.querySelector('#firstName');
         const email = document.querySelector('#email');
-        //const password = document.querySelector('#password');
 
         lastName.value = data.data.lastName;
         firstName.value = data.data.firstName;
         email.value = data.data.email;
-        //password.value = data.data.password;
-
-        console.log(data.data);
     });
 
 // pour la modification d'un post
@@ -35,7 +31,7 @@ form.addEventListener('submit', function (e) {
     }
 
     axios.put("http://localhost:3000/api/users/me/", data, headers).then(() => {
-        //window.location.href = 'index.html'
+        alert('Profil modifié')
     })
 
 })
