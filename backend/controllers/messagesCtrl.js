@@ -71,19 +71,28 @@ module.exports = {
             return models.Message.findAll({
                 order: [(order != null) ? order.split(':') : ['createdAt', 'ASC']],
                 attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
-                include: [{
-                    model: models.User,
-                    as: 'User',
-                    attributes: ['firstName', 'lastName'],
-                }]
-            }).then((messages) => ({ messages, isAdmin: user.get('isAdmin') }))
-        }).then(function ({ messages, isAdmin }) {
+                include: [
+                    {
+                        model: models.User,
+                        as: 'User',
+                        attributes: ['firstName', 'lastName'],
+                    },
+                    {
+                        model: models.Like,
+                        as: 'Likes'
+                    }
+                ]
+            }).then((messages) => ({messages, isAdmin: user.get('isAdmin')}))
+        }).then(function ({messages, isAdmin}) {
             if (messages) {
                 const jsonMessages = []
                 for (let i = 0; i < messages.length; i++) {
                     const jsonMessage = messages[i].toJSON();
                     //Si le message concerne l'utilisateur connecté, on ajoute un champ modifiable
                     jsonMessage['modifiable'] = userId === jsonMessage.UserId || isAdmin
+                    jsonMessage['liked'] = jsonMessage.Likes.find((like) => {
+                        return like.UserId === userId && like.isLike > 0
+                    })
                     jsonMessages.push(jsonMessage)
                 }
                 res.status(200).json(jsonMessages);

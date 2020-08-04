@@ -1,5 +1,5 @@
 const headers = {
-    headers: { 'Authorization': "Bearer " + localStorage.getItem("api-token") }
+    headers: {'Authorization': "Bearer " + localStorage.getItem("api-token")}
 };
 
 const getMessages = () => axios.get("http://localhost:3000/api/messages", headers).then((data) => {
@@ -23,8 +23,8 @@ const listMessages = (messages) => {
         parent.appendChild(div); // ajout de div dans l'element parent
 
         /**
-         * post header 
-        */
+         * post header
+         */
         const postHeader = document.createElement('div');
         postHeader.className = 'post-header'
         div.appendChild(postHeader);
@@ -128,25 +128,16 @@ const listMessages = (messages) => {
         divLikes.appendChild(spanLikes);
         spanLikes.innerHTML = nbLikes + " J'aime";
 
-        // lien pour dislike
-        /*const divDislikes = document.createElement('div');
-        divDislikes.className = 'div-dislikes';
-        divLikesDislike.appendChild(divDislikes);
-
-        const btnDislikes = document.createElement('button');
-        btnDislikes.className = 'btn-dislikes';
-        divDislikes.appendChild(btnDislikes);
-
-        const imgDislikes = document.createElement('img');
-        imgDislikes.className = "dislikes-icon";
-        imgDislikes.src = "https://img.icons8.com/material-outlined/50/000000/facebook-like.png";
-        btnDislikes.appendChild(imgDislikes);
-        */
+        let likeOrDislike = messages[i].liked ? 'dislike' : 'like'
 
         btnLikes.addEventListener('click', () => {
-            axios.post(`http://localhost:3000/api/messages/${messages[i].id}/vote/like`, {}, headers).then((resp) => {
-                nbLikes += 1
+            axios.post(`http://localhost:3000/api/messages/${messages[i].id}/vote/${likeOrDislike}`, {}, headers).then((resp) => {
+                if (likeOrDislike === 'like')
+                    nbLikes += 1
+                else
+                    nbLikes -= 1
                 spanLikes.innerHTML = nbLikes + " J'aime";
+                likeOrDislike = likeOrDislike === 'like' ? 'dislike' : 'like'
             })
         })
         /*
